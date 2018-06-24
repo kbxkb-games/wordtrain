@@ -27,36 +27,6 @@ USAGE AND INSTRUCTION - https://github.com/kbxkb-games/wordtrain
 using namespace std;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Class Formatter is used to throw my own exceptions from standard exceptions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-class Formatter
-{
-public:
-	Formatter() {}
-	~Formatter() {}
-
-	template <typename Type>
-	Formatter & operator << (const Type & value)
-	{
-		stream_ << value;
-		return *this;
-	}
-
-	std::string str() const		{return stream_.str();}
-	operator std::string () const	{return stream_.str();}
-
-	enum ConvertToString
-	{
-		to_str
-	};
-	std::string operator >> (ConvertToString) {return stream_.str();}
-private:
-	std::stringstream stream_;
-	Formatter(const Formatter &);
-	Formatter & operator = (Formatter &);
-};
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Global variable KBPlays is used to hold computer play choices for summarzing at the end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 vector<string> KBPlays;
@@ -96,7 +66,7 @@ allWords::allWords(void)
 	}
 	catch(exception& e)
 	{
-		throw runtime_error(Formatter() << "Standard exception in allWords constructor: " << e.what());
+		throw runtime_error(e.what());
 	}
 };
 
