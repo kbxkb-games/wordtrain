@@ -6,6 +6,8 @@ This README can guide you, step by step, if you want to:
 * Download the code, compile and play the game
 * Download and follow along a walk-through of the C++ code
 
+#### License - MIT (https://opensource.org/licenses/MIT) ####
+
 #### Download the code, compile and play the game ####
 
 1. My instructions are for Linux. On Windows, you can use an IDE like Visual Studio to compile and run the code; it might need some additional steps like setting of relative paths to find the word files for loading, using C++ 11 and STL libraries, etc.
@@ -38,5 +40,9 @@ This README can guide you, step by step, if you want to:
 2. The C++ code uses a custom class `allWords` to wrap these 16 std::set-s, and a global object (`aw`) to store these words in heap. The constructor of this class uses ifstream to read each smaller file and populate the individual sets. The addresses of these 16 sets are stored in another set, sorted by the length of the words (from 5 to 20). The destructor of this class releases the memory used by these set objects
 3. The code is easy to read through - start with `main()`, which provides user interface control flow in terms of user choosing whether they want to start or they want the computer to start, prints instruction/ usage rules, and eventually calls out to one of these two routines: `GamePlayUserStarts` and `GamePlayComputerStarts` to delegate finer control over game play
 4. The two routines `GamePlayUserStarts` and `GamePlayComputerStarts` are slightly repetetive, and I believe that they can be combined for optimizing code length. However, they both sport while loops and either waits for the user to play a letter or asks the computer to play a letter if it is the computer's turn. The function where the computer serves the next letter is `GetNextChar(...)`
-5. `GetNextChar` creates a `std::vector`
-
+5. `GetNextChar` creates a `std::vector` of possible potential lengths it must target. If the word played so far is "star", it must target these lengths: 6, 8, 10, 12, 14, 16, 18 and 20 to win. if it targets a word that is say 5 or 7 characters long, it may be forced to complete the word, and thereby lose
+6. Within this vector, it randomly picks a length, and calls out to `SearchTargetLength()` to pick a word from that set. While picking the word, `SearchTargetLength()` tries to make sure that there does not exist a substring of the "wrong length" which would result in the word being terminated prematurely (e.g., if it picks "startle", it will never reach the end, as "start" will finish the game)
+7. Finally, where does the "dumbing down" happen? The randomness described in step 5 above contributes heavily to this dumbing down. This is because of two reasons:
+    1. The computer does not remember what it picked the last time (there is an exception to this - the *only* time computer remembers what it picked last time is if the user plays the exact same character it wants her/him to play when it is their turn)
+    2. The randomeness ensures that the computer does not have full visibility into all possibilities. Say, it picks the length 10, and hence proceeds to target a word of length 10. There may (and most likley, will) exist a lot of possibilities with lengths less than 10, which the human user can then exploit
+8. Feel free to download & improve!
