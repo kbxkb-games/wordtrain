@@ -13,7 +13,8 @@ This README can guide you, step by step, if you want to:
 3. Make sure you can compile C++ with C++ 11 libraries installed
     1. On Debian derivatives like Ubuntu, this will help: `sudo apt-get install build-essential`
 4. Navigate to the directory where you cloned this repository. if you list the files, you should see train.cpp and and subdirectory called wordsNOCR
-5. Build the ex utable -CR
+5. Build the executable - `g++ -std=c++11 -o train train.cpp`
+6. XXX
 
 
 #### Download and follow along a walk-through of the C++ code ####
