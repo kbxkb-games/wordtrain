@@ -1,3 +1,15 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AUTHOR - KOUSHIK BISWAS
+USAGE AND INSTRUCTION - https://github.com/kbxkb-games/wordtrain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 #include <iostream>
 #include <set>
 #include <vector>
@@ -14,6 +26,9 @@
 
 using namespace std;
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class Formatter is used to throw my own exceptions from standard exceptions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 class Formatter
 {
 public:
@@ -41,8 +56,14 @@ private:
 	Formatter & operator = (Formatter &);
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Global variable KBPlays is used to hold computer play choices for summarzing at the end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 vector<string> KBPlays;
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class allWords is the wrapper around 16 std::sets that are used to load all the words into memory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 class allWords
 {
 public:
@@ -101,6 +122,10 @@ void allWords::debug_printCount()
 	}
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+findbeginswith provides the comparision routine used by SearchTargetLength() to quickly locate
+the word inside a set of given length (using std::find_if) that starts with the current string
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 class findbeginswith
 {
 public:
@@ -110,6 +135,16 @@ private:
 	string _beginswith;
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SearchTargetLength():
+GetNextChar creates a std::vector of possible potential lengths it must target. If the word played
+so far is "star", it must target these lengths: 6, 8, 10, 12, 14, 16, 18 and 20 to win. If it
+targets a word that is say 5 or 7 characters long, it may be forced to complete the word, and thereby lose
+Within this vector, it randomly picks a length, and calls out to SearchTargetLength() to randomly
+pick a word from that set. While picking the word, SearchTargetLength() tries to make sure that
+there does not exist a substring of the "wrong length" which would result in the word being terminated
+prematurely (e.g., if it picks "startle", it will never reach the end, as "start" will finish the game)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 char SearchTargetLength(string strWord, int targetlen, string& targetword)
 {
 	set<string>::iterator it = std::find_if(aw[targetlen - 5]->begin(), aw[targetlen - 5]->end(), findbeginswith(strWord));
@@ -152,6 +187,17 @@ char SearchTargetLength(string strWord, int targetlen, string& targetword)
 		}
 	}
 };
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GetNextChar():
+GetNextChar creates a std::vector of possible potential lengths it must target. If the word played
+so far is "star", it must target these lengths: 6, 8, 10, 12, 14, 16, 18 and 20 to win. If it
+targets a word that is say 5 or 7 characters long, it may be forced to complete the word, and thereby lose
+Within this vector, it randomly picks a length, and calls out to SearchTargetLength() to randomly
+pick a word from that set. While picking the word, SearchTargetLength() tries to make sure that
+there does not exist a substring of the "wrong length" which would result in the word being terminated
+prematurely (e.g., if it picks "startle", it will never reach the end, as "start" will finish the game)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 //the out parameter targetword will be populated with the word computer has in mind when it plays the next character
 //however, this also means that if it populated while coming in, it is what the computer HAD IN MIND THE LAST TIME
@@ -200,6 +246,10 @@ char GetNextChar(string strWord, string& targetword)
 	return '?';
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Controls the flow of game play when user starts playing - highlight is that it calls GetNextChar
+to invoke the computer gameplay, and simply waits for user input to invoke user gameplay
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void GamePlayUserStarts(void)
 {
 	char userInput = '~';
@@ -292,6 +342,10 @@ void GamePlayUserStarts(void)
 	}
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Controls the flow of game play when computer starts playing - highlight is that it calls GetNextChar
+to invoke the computer gameplay, and simply waits for user input to invoke user gameplay
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void GamePlayComputerStarts(void)
 {
 	char userInput = '~';
@@ -383,6 +437,9 @@ void GamePlayComputerStarts(void)
 	}
 };
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+main()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 int main()
 {
 	//bool bQuit = false;
