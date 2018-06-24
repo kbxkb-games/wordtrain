@@ -1,5 +1,5 @@
 # wordtrain #
-## A command-line game I wrote for kids in C++ - needs C++ 11 or higher ##
+## A command-line game I wrote for kids in C++ (needs C++ 11 or higher) ##
 ### Computer and you take turns in playing a letter each. First player to complete a valid word (5 letter or longer) loses! ###
 
 This README can guide you, step by step, if you want to:
