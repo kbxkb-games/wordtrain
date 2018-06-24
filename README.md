@@ -23,8 +23,20 @@ This README can guide you, step by step, if you want to:
 2. The program only runs one game and then exits. You need to run it again to play again - which means it loads the dictionary files all over again when it re-runs. This behavior can be very easily changed to run in an infinite loop - see the notes in the code walk-through section
 3. I have tried to dumb the program down - after all it is the computer, and it will (almost) always win if you make it consider every possibility. As a result, it sometimes acts super dumb
 4. A popular version of this game on the IOS app store works for words 3 letters or longer. I find that too easy. To make it more challenging, I have changed the minimum length to 5
+5. Maximum word length is set to 20 - plenty actually
 
 
-#### Download and follow along a walk-through of the C++ code ####
+#### Follow along a walk-through of the C++ code ####
 
-YYY
+1. Before walking through the C++ code, let me quickly walk you through the dictionary files. This is my source of dictionary files: https://github.com/dwyl/english-words
+    1. The only file you will need from the repo linked above is words_alpha.txt
+    2. I used `sed` to remove all the carriage returns ('\r' characters): ` sed -i 's/\r//g' words_alpha.txt`
+    3. I copied the file to a subdirectory called "WordsNOCR", the CPP code uses this relative path to load the words into memory at startup
+    4. Inside WordsNOCR, I have a "scripts" subdirectory. It has 2 shell scripts. All we will need is the one that says, "split_words_by_length.sh"
+    5. I ran this script - it expects a parameter - the words_alpha.txt file. It uses sed to break the file into smaller sub-files, each with words of a specific length. It starts from 5, and goes all the way upto 31, which is the length of the longest word in the big file: `./scripts/split_words_by_length.sh words_alpha.txt`
+    6. The C++ code uses these smaller files to load the words into memory - organizing them into 16 std::set objects, where each set has all the words of a particular length, from length 5 through length 20
+2. The C++ code uses a custom class `allWords` to wrap these 16 std::set-s, and a global object (`aw`) to store these words in heap. The constructor of this class uses ifstream to read each smaller file and populate the individual sets. The addresses of these 16 sets are stored in another set, sorted by the length of the words (from 5 to 20). The destructor of this class releases the memory used by these set objects
+3. The code is easy to read through - start with `main()`, which provides user interface control flow in terms of user choosing whether they want to start or they want the computer to start, prints instruction/ usage rules, and eventually calls out to one of these two routines: `GamePlayUserStarts` and `GamePlayComputerStarts` to delegate finer control over game play
+4. The two routines `GamePlayUserStarts` and `GamePlayComputerStarts` are slightly repetetive, and I believe that they can be combined for optimizing code length. However, they both sport while loops and either waits for the user to play a letter or asks the computer to play a letter if it is the computer's turn. The function where the computer serves the next letter is `GetNextChar(...)`
+5. `GetNextChar` creates a `std::vector`
+
