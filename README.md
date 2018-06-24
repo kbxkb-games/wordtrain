@@ -1,6 +1,6 @@
 # wordtrain #
 ## A command-line game I wrote for my kids in C++ ##
-### Computer and you take turns in playing a letter each. One to complete a word (between length between 5 & 20) loses! ###
+### Computer and you take turns in playing a letter each. First player to complete a valid word (5 letter or longer) loses! ###
 
 This README can guide you, step by step, if you want to:
 * Download the code, compile and play the game
