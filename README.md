@@ -49,7 +49,7 @@ This README can guide you, step by step, if you want to:
     1. The randomeness ensures that the computer does not have full visibility into all possibilities. Say, it picks the length 10, and hence proceeds to target a word of length 10. There may (and most likley, will) exist a lot of possibilities with lengths less than 10, which the human user can then exploit. Similarly, even within length 10, it picks one word randomly, not making any effort to pick the *best* word that will increase the chances of winning
 8. Feel free to download & improve!
 
-#### Future Improvements to code and functionaity ####
+### Future Improvements to code and functionaity ###
 
 1. The code should be organized to be production-quality
     1. The class `allwords` should have its own header and implementation files, along with makefiles to tie all object files together while linking to create the executable. This breaks down monolithic long CPP files (mine is almost 500 lines long) - and increases both readability and maintainability
